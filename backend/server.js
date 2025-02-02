@@ -7,13 +7,22 @@ import authRoutes from './routes/authRoutes.js';
 import expenseRoutes from './routes/expenseRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
-dotenv.config({ path: "./env" });
+dotenv.config();
 
-const app = express();
+const allowedOrigins = [
+  "https://expense-tracker-nhjd.vercel.app", // Main frontend URL
+  "https://expense-tracker-nhjd-dfzfcxg62-adarsh-naik-2004s-projects.vercel.app" // Vercel preview deployment
+];
 
 app.use(cors({
-  origin: process.env.CLIENT_URL,  // Allow only frontend URL
-  credentials: true                // Allow cookies and authentication headers
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, origin);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
 }));
 
 app.use(express.json());
