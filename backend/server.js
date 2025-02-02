@@ -13,18 +13,29 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS configuration
+// CORS configuration with dynamic origin handling
 app.use(cors({
-  origin: ['https://expense-tracker-nhjd.vercel.app', 'https://expense-tracker-nhjd-dfzfcxg62-adarsh-naik-2004s-projects.vercel.app'],
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if(!origin) return callback(null, true);
+    
+    // List of allowed origins
+    const allowedOrigins = [
+      'https://expense-tracker-nhjd.vercel.app',
+      'https://expense-tracker-nhjd-git-main-adarsh-naik-2004s-projects.vercel.app',
+      'http://localhost:3000'
+    ];
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
-
-// Basic route for testing
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Server is running' });
-});
 
 // Routes
 app.use('/api/auth', authRoutes);
