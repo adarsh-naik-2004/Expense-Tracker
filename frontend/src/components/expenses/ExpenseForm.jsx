@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useThemeContext } from '../../contexts/ThemeContext'; 
 
 const ExpenseForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -14,8 +15,10 @@ const ExpenseForm = ({ onSuccess }) => {
   const token = localStorage.getItem('accessToken');
 
 
+  const { darkMode } = useThemeContext();
+
   const api = axios.create({
-    baseURL: "http://localhost:5000/api",
+    baseURL: import.meta.env.VITE_API_URL,
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`
@@ -142,40 +145,43 @@ const ExpenseForm = ({ onSuccess }) => {
   };
 
   return (
-    <div className="expense-form">
-      <h2>Add New Expense</h2>
-      {error && <div className="error-message">{error}</div>}
-      
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Description:</label>
-          <input
-            type="text"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="Enter expense description"
+     <div className={`max-w-lg mx-auto p-6 rounded-lg shadow-md ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+      <h2 className="text-2xl font-bold mb-4 text-center">Add New Expense</h2>
+      {error && <div className="text-red-500 text-sm mb-3">{error}</div>}
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block font-medium">Description:</label>
+          <input 
+            type="text" 
+            name="description" 
+            value={formData.description} 
+            onChange={handleChange} 
+            placeholder="Enter expense description" 
+            className={`w-full border ${darkMode ? 'border-gray-600' : 'border-gray-300'} p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400`}
           />
         </div>
 
-        <div className="form-group">
-          <label>Amount:</label>
-          <input
-            type="number"
-            name="amount"
-            value={formData.amount}
-            onChange={handleChange}
-            placeholder="0.00"
-            step="0.01"
+        <div>
+          <label className="block font-medium">Amount:</label>
+          <input 
+            type="number" 
+            name="amount" 
+            value={formData.amount} 
+            onChange={handleChange} 
+            placeholder="0.00" 
+            step="0.01" 
+            className={`w-full border ${darkMode ? 'border-gray-600' : 'border-gray-300'} p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400`}
           />
         </div>
 
-        <div className="form-group">
-          <label>Category:</label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
+        <div>
+          <label className="block font-medium">Category:</label>
+          <select 
+            name="category" 
+            value={formData.category} 
+            onChange={handleChange} 
+            className={`w-full border ${darkMode ? 'border-gray-600' : 'border-gray-300'} p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400`}
           >
             <option value="food">Food</option>
             <option value="transport">Transport</option>
@@ -185,20 +191,21 @@ const ExpenseForm = ({ onSuccess }) => {
           </select>
         </div>
 
-        <div className="form-group">
-          <label>Date:</label>
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
+        <div>
+          <label className="block font-medium">Date:</label>
+          <input 
+            type="date" 
+            name="date" 
+            value={formData.date} 
+            onChange={handleChange} 
+            className={`w-full border ${darkMode ? 'border-gray-600' : 'border-gray-300'} p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400`}
           />
         </div>
 
         <button 
           type="submit" 
-          disabled={isSubmitting}
-          className={isSubmitting ? "submitting" : ""}
+          disabled={isSubmitting} 
+          className={`w-full p-3 text-white font-bold rounded-lg ${isSubmitting ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"}`}
         >
           {isSubmitting ? "Saving..." : "Add Expense"}
         </button>

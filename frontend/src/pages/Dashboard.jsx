@@ -10,6 +10,8 @@ import { Link, useLocation } from 'react-router-dom';
 import InsightsChart from '../components/charts/InsightsChart';
 import ExpenseTable from '../components/expenses/ExpenseTable';
 import api from '../services/api';
+import { useThemeContext } from '../contexts/ThemeContext';
+
 
 export default function Dashboard() {
   const [expenses, setExpenses] = useState({ data: [], total: 0 });
@@ -19,6 +21,8 @@ export default function Dashboard() {
   const [refreshKey, setRefreshKey] = useState(0);
 
   const location = useLocation();
+
+  const { darkMode } = useThemeContext();
 
   const fetchData = async () => {
     try {
@@ -33,14 +37,6 @@ export default function Dashboard() {
         api.get('/expenses/insights')
       ]);
       
-      const validatedExpenses = Array.isArray(expensesRes.data?.expenses)
-        ? expensesRes.data.expenses
-        : [];
-
-      const validatedInsights = Array.isArray(insightsRes.data)
-        ? insightsRes.data
-        : [];
-
       setExpenses({
         data: expensesRes.data.expenses || [],
         total: expensesRes.data.total || 0
@@ -76,7 +72,14 @@ export default function Dashboard() {
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
-        <Typography variant="h3" component="h1" sx={{ fontWeight: 700 }}>
+        <Typography 
+          variant="h3" 
+          component="h1" 
+          sx={{ 
+            fontWeight: 700, 
+            color: darkMode ? 'gray' : 'inherit' // Adjust text color based on darkMode
+          }}
+        >
           Expense Dashboard
         </Typography>
         <Button 
@@ -99,7 +102,7 @@ export default function Dashboard() {
             mb: 6,
             p: 3,
             borderRadius: 2,
-            bgcolor: 'background.paper',
+            bgcolor: darkMode ? '#1e1e1e' : 'background.paper', // Change background color
             boxShadow: 3
           }}>
             <InsightsChart data={expenses.data} refreshKey={refreshKey} />
@@ -108,10 +111,14 @@ export default function Dashboard() {
           <Box sx={{ 
             p: 3,
             borderRadius: 2,
-            bgcolor: 'background.paper',
+            bgcolor: darkMode ? '#1e1e1e' : 'background.paper', // Change background color
             boxShadow: 3
           }}>
-            <Typography variant="h5" gutterBottom sx={{ mb: 3, fontWeight: 600 }}>
+            <Typography 
+              variant="h5" 
+              gutterBottom 
+              sx={{ mb: 3, fontWeight: 600, color: darkMode ? 'white' : 'inherit' }} // Change text color
+            >
               Recent Transactions
             </Typography>
             <ExpenseTable

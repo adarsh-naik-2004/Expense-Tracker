@@ -10,15 +10,22 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import ThemeToggle from './ThemeToggle';
 
+import { useThemeContext } from '../../contexts/ThemeContext'; 
+
 export default function Navbar() {
   const { user, logout } = useAuth();
 
+  const { darkMode } = useThemeContext(); 
+
   return (
-    <AppBar position="static" sx={{ 
-      transition: 'background-color 0.3s ease',
-      mb: 4,
-      bgcolor: 'background.default'
-    }}>
+    <AppBar 
+      position="static" 
+      sx={{ 
+        transition: 'background-color 0.3s ease',
+        mb: 4,
+        bgcolor: darkMode ? '#121212' : '#1976d2', // Conditional background color based on darkMode
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -30,7 +37,7 @@ export default function Navbar() {
               mr: 2,
               fontWeight: 700,
               letterSpacing: '.1rem',
-              color: 'inherit',
+              color: darkMode ? 'white' : 'inherit', // Adjust text color based on darkMode
               textDecoration: 'none',
               flexGrow: { xs: 1, sm: 0 }
             }}
@@ -43,7 +50,7 @@ export default function Navbar() {
               <Button
                 component={Link}
                 to="/dashboard"
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: darkMode ? 'white' : 'inherit', display: 'block' }} // Adjust text color
               >
                 Dashboard
               </Button>

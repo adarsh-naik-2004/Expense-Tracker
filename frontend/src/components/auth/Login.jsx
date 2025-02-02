@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import api from '../../services/api';
+import { useThemeContext } from '../../contexts/ThemeContext';
 import { 
   Box,
   TextField, 
@@ -23,6 +24,8 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const { darkMode } = useThemeContext();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -42,68 +45,77 @@ export default function Login() {
 
 
   return (
-    <Box sx={{ 
+    <Box 
+    sx={{ 
       maxWidth: 400, 
       mx: 'auto', 
       mt: 8, 
       p: 3, 
       boxShadow: 3, 
-      borderRadius: 2 
-    }}>
-      <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 3 }}>
-        Sign In
+      borderRadius: 2, 
+      backgroundColor: darkMode ? '#1e1e1e' : '#ffffff' 
+    }}
+  >
+    <Typography 
+      variant="h4" 
+      gutterBottom 
+      sx={{ textAlign: 'center', mb: 3, color: darkMode ? 'white' : 'inherit' }} 
+    >
+      Sign In
+    </Typography>
+
+    {error && (
+      <Alert severity="error" sx={{ mb: 2 }}>
+        {error}
+      </Alert>
+    )}
+
+    <Box component="form" onSubmit={handleSubmit}>
+      <TextField
+        fullWidth
+        margin="normal"
+        label="Email Address"
+        type="email"
+        required
+        value={credentials.email}
+        onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+        disabled={loading}
+        sx={{ input: { color: darkMode ? 'white' : 'inherit' }, label: { color: darkMode ? 'white' : 'inherit' } }}
+      />
+
+      <TextField
+        fullWidth
+        margin="normal"
+        label="Password"
+        type="password"
+        required
+        value={credentials.password}
+        onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+        disabled={loading}
+        sx={{ input: { color: darkMode ? 'white' : 'inherit' }, label: { color: darkMode ? 'white' : 'inherit' } }}
+      />
+
+      <Button
+        fullWidth
+        variant="contained"
+        type="submit"
+        sx={{ mt: 3, py: 1.5 }}
+        disabled={loading}
+      >
+        {loading ? (
+          <CircularProgress size={24} color="inherit" />
+        ) : (
+          'Sign In'
+        )}
+      </Button>
+
+      <Typography variant="body2" sx={{ mt: 2, textAlign: 'center', color: darkMode ? 'white' : 'inherit' }}>
+        Don't have an account?{' '}
+        <Link to="/register" style={{ textDecoration: 'none', color: darkMode ? 'white' : '#1976d2' }}>
+          Create one
+        </Link>
       </Typography>
-
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-
-      <Box component="form" onSubmit={handleSubmit}>
-        <TextField
-          fullWidth
-          margin="normal"
-          label="Email Address"
-          type="email"
-          required
-          value={credentials.email}
-          onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-          disabled={loading}
-        />
-
-        <TextField
-          fullWidth
-          margin="normal"
-          label="Password"
-          type="password"
-          required
-          value={credentials.password}
-          onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-          disabled={loading}
-        />
-
-        <Button
-          fullWidth
-          variant="contained"
-          type="submit"
-          sx={{ mt: 3, py: 1.5 }}
-          disabled={loading}
-        >
-          {loading ? (
-            <CircularProgress size={24} color="inherit" />
-          ) : (
-            'Sign In'
-          )}
-        </Button>
-
-        <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
-          Don't have an account?{' '}
-          <Link to="/register" style={{ textDecoration: 'none' }}>
-            Create one
-          </Link>
-        </Typography>
-      </Box>
     </Box>
+  </Box>
   );
 }
