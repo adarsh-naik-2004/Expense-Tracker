@@ -3,8 +3,8 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
-import authRoutes from './api/routes/authRoutes.js';
-import expenseRoutes from './api/routes/expenseRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import expenseRoutes from './routes/expenseRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
     
 dotenv.config({
