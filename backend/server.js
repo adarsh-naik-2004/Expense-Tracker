@@ -6,20 +6,12 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import expenseRoutes from './routes/expenseRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
-    
-dotenv.config({
-  path: "./env"
-});
+
+dotenv.config({ path: "./env" });
 
 const app = express();
 
 app.use(cors());
-
-const PORT = process.env.PORT;
-
-console.log(process.env.CLIENT_URL);
-
-
 app.use(express.json());
 app.use(cookieParser());
 
@@ -33,6 +25,4 @@ app.use('/api/expenses', expenseRoutes);
 // Error Handling
 app.use(errorHandler);
 
-app.listen(PORT, () => 
-  console.log(`Server running on port ${PORT}`)
-);
+export default app;
