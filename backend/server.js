@@ -11,7 +11,11 @@ dotenv.config({ path: "./env" });
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL,  // Allow only frontend URL
+  credentials: true                // Allow cookies and authentication headers
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 
