@@ -15,10 +15,8 @@ const PORT = process.env.PORT || 5000;
 console.log(process.env.CLIENT_URL);
 
 // Middleware
-app.use(cors({
-  origin: process.env.CLIENT_URL,
-  credentials: true
-}));
+app.options("*", cors());
+
 app.use(express.json());
 app.use(cookieParser());
 
