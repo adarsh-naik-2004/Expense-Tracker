@@ -2,6 +2,11 @@ import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
 
 export const verifyJWT = (req, res, next) => {
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  
   const authHeader = req.headers.authorization || req.headers.Authorization;
   
   if (!authHeader?.startsWith('Bearer ')) {
