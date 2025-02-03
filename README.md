@@ -16,7 +16,8 @@ The Expense Tracker is a full-stack web application designed to help users manag
 
 ### Clone the Repository
 ```sh
-git clone https://github.com/Gsharp73/Expense-Tracker.git
+git clone
+https://github.com/adarsh-naik-2004/Expense-Tracker.git
 cd Expense-Tracker
 ```
 
