@@ -9,14 +9,17 @@ import {
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import ThemeToggle from './ThemeToggle';
-
+import { useNavigate } from 'react-router-dom';
 import { useThemeContext } from '../../contexts/ThemeContext'; 
 
 export default function Navbar() {
   const { user, logout } = useAuth();
-
+  const navigate = useNavigate();
   const { darkMode } = useThemeContext(); 
 
+  const handleLogout = () => {
+    logout(navigate);
+  };
   return (
     <AppBar 
       position="static" 
@@ -62,7 +65,7 @@ export default function Navbar() {
             {user ? (
               <Button 
                 color="inherit" 
-                onClick={logout}
+                onClick={handleLogout}
                 sx={{ fontWeight: 600 }}
               >
                 Logout
